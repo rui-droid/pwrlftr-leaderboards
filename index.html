@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PWRLFTR Leaderboards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/logo/pwrlft-lb-transparent.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <button id="menuToggle" class="menu-btn" type="button" aria-label="Open menu">&#9776;</button>
+  </div>
+  <div class="header-center">
+    <div class="header-branding">
+    <p class="eyebrow">Meet Command | Live Control</p>
+    <h1 class="header-logo-wrap">
+      <img
+        class="header-logo"
+        src="assets/logo/pwrlft-lb-transparent.png"
+        alt="PWRLFTR Leaderboards"
+      />
+    </h1>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button id="meetHistoryToggle" class="ghost-btn" type="button">Meet History</button>
+  </div>
+</header>
+
+<aside class="side-menu" id="sideMenu">
+  <div class="side-menu__header">
+    <p class="eyebrow">Navigation</p>
+    <button id="menuClose" class="ghost-btn ghost-btn--small" type="button">Close</button>
+  </div>
+  <nav class="side-menu__nav">
+    <a href="#add-athlete" class="side-menu__link" data-menu-link>Add Athlete</a>
+    <a href="#meet-history" class="side-menu__link" data-menu-link>Meet History</a>
+    <a href="#attempts" class="side-menu__link" data-menu-link>Attempts</a>
+    <a href="#leaderboards" class="side-menu__link" data-menu-link>Leaderboards</a>
+  </nav>
+</aside>
+<div class="menu-backdrop" id="menuBackdrop"></div>
+<div class="toast hidden" id="saveToast" role="status" aria-live="polite">
+  <span class="toast__icon" aria-hidden="true">✔</span>
+  <span class="toast__message" id="saveToastMessage">Saved</span>
+</div>
+
+<main>
+  <section class="card meet-panel" id="meetPanel">
+    <div class="meet-panel__header" id="meet-history">
+      <div>
+        <h2>Meet History</h2>
+        <p id="activeMeetMeta" class="muted"></p>
+      </div>
+      <div class="meet-panel__select">
+        <label for="meetSelect">Active Meet</label>
+        <select id="meetSelect"></select>
+      </div>
+    </div>
+    <div class="meet-active">
+      <div>
+        <p class="muted">Active Meet Name</p>
+        <div class="meet-name-row">
+          <span id="activeMeetName">--</span>
+          <button id="editMeetName" class="ghost-btn ghost-btn--small" type="button">Edit</button>
+          <button id="removeMeet" class="ghost-btn ghost-btn--small ghost-btn--danger" type="button">
+            Remove Meet
+          </button>
+        </div>
+      </div>
+      <div class="meet-name-edit hidden" id="meetNameEditRow">
+        <input id="meetNameEdit" placeholder="Meet name" />
+        <button id="saveMeetName" class="ghost-btn ghost-btn--small" type="button">Save</button>
+      </div>
+    </div>
+    <form id="meetForm" class="meet-form">
+      <input id="meetName" placeholder="Meet Name" required />
+      <input id="meetDate" type="text" inputmode="numeric" placeholder="DD/MM/YYYY" required />
+      <input id="meetLocation" placeholder="Location (optional)" />
+      <button type="submit">Create Meet</button>
+    </form>
+    <div class="meet-history-list" id="meetHistoryList"></div>
+  </section>
+
+  <section class="card" id="add-athlete">
+    <div class="section-title-row">
+      <h2 id="athleteFormTitle">Add Athlete</h2>
+      <span class="edit-mode-indicator hidden" id="editModeIndicator">Edit Mode</span>
+    </div>
+    <div class="form-row">
+      <input id="name" placeholder="Athlete Name" />
+      <select id="sex">
+        <option value="">Sex</option>
+        <option value="Female">Female</option>
+        <option value="Male">Male</option>
+      </select>
+      <select id="category">
+        <option value="">Category</option>
+        <option value="Sub-Junior">Sub-Junior</option>
+        <option value="Junior">Junior</option>
+        <option value="Open">Open</option>
+        <option value="Master 1">Master 1</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <input id="bodyweight" type="number" placeholder="Bodyweight (kg)" step="0.1" min="0" />
+      <div class="auto-class-note" id="autoClassDisplay">Weightclass: --</div>
+      <button id="athleteSubmit" onclick="addAthlete()">Add Athlete</button>
+    </div>
+  </section>
+
+  <section class="card" id="attempts">
+    <h2>Attempts</h2>
+    <div id="athletes"></div>
+  </section>
+
+  <section class="card" id="leaderboards">
+    <div class="leaderboard-header">
+      <h2 id="leaderboardTitle">Leaderboard</h2>
+      <div class="leaderboard-controls">
+        <label>
+          Sex
+          <select id="sexFilter">
+            <option value="all">All</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+          </select>
+        </label>
+        <label>
+          Category
+          <select id="categoryFilter">
+            <option value="all">All</option>
+          </select>
+        </label>
+        <label>
+          Class
+          <select id="weightFilter">
+            <option value="all">All</option>
+          </select>
+        </label>
+        <div class="lift-toggle" role="group" aria-label="Lift leaderboard">
+          <button type="button" data-lift="squat">Squat</button>
+          <button type="button" data-lift="bench">Bench</button>
+          <button type="button" data-lift="deadlift">Deadlift</button>
+          <button type="button" data-lift="total" class="active">Total</button>
+        </div>
+        <div class="leaderboard-actions sort-toggle" role="group" aria-label="Sort leaderboard">
+          <button type="button" data-sort="total" class="active">Total</button>
+          <button type="button" data-sort="gl">GL Points</button>
+        </div>
+        <button type="button" id="saveLeaderboard" class="ghost-btn">Save Leaderboard</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr id="leaderboardHeadRow">
+          <th>Rank</th>
+          <th>Athlete</th>
+          <th>Metric</th>
+          <th>Metric 2</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard"></tbody>
+    </table>
+  </section>
+
+  <section class="card strategy-card">
+    <div class="strategy-header">
+      <div>
+        <h2>Attempt Strategy</h2>
+        <p class="muted">GL-aware projections for filtered athletes</p>
+      </div>
+      <div class="strategy-mode">
+        <label>
+          Scoring
+          <select id="strategyScoring">
+            <option value="total">Total</option>
+            <option value="gl">GL Points</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="strategy-grid">
+      <label>
+        Athlete
+        <select id="strategyAthlete"></select>
+      </label>
+      <label>
+        Target
+        <select id="strategyTarget"></select>
+      </label>
+      <label>
+        Lift
+        <select id="strategyLift">
+          <option value="squat">Squat</option>
+          <option value="bench">Bench</option>
+          <option value="deadlift">Deadlift</option>
+          <option value="total">Total</option>
+        </select>
+      </label>
+      <div class="strategy-result">
+        <p class="strategy-value" id="strategyValue">--</p>
+        <p class="strategy-note" id="strategyNote">Select athletes to view recommendation.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
