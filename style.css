@@ -16,6 +16,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  min-width: 1200px;
   padding: 32px clamp(16px, 4vw, 48px);
   font-family: 'Segoe UI', 'Rajdhani', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   color: var(--text-primary);
@@ -23,6 +24,7 @@ body {
     linear-gradient(135deg, var(--charcoal) 0%, var(--charcoal-2) 55%, var(--charcoal-3) 100%);
   background-attachment: fixed;
   letter-spacing: 0.01em;
+  overflow-x: auto;
 }
 
 
@@ -259,159 +261,6 @@ main {
   margin: 0 auto;
 }
 
-@media (max-width: 900px) {
-  body {
-    padding: 24px 16px;
-  }
-
-  header {
-    grid-template-columns: auto 1fr auto;
-  }
-
-  .header-logo {
-    max-width: clamp(160px, 45vw, 300px);
-  }
-
-  .header-actions {
-    gap: 8px;
-  }
-
-  .ghost-btn {
-    padding: 8px 16px;
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 720px) {
-  header {
-    grid-template-columns: 1fr;
-    row-gap: 12px;
-  }
-
-  .header-left,
-  .header-center,
-  .header-actions {
-    grid-column: 1;
-  }
-
-  .header-left {
-    justify-content: flex-start;
-  }
-
-  .header-center {
-    order: 1;
-  }
-
-  .header-actions {
-    order: 2;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .menu-btn {
-    min-width: 42px;
-    min-height: 42px;
-  }
-
-  .card {
-    padding: 18px;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .meet-panel__header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .meet-active {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .meet-name-row {
-    flex-wrap: wrap;
-  }
-
-  .meet-history-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .meet-history-actions {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-
-  .athlete-card__header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .athlete-card__actions {
-    width: 100%;
-    align-items: flex-start;
-  }
-
-  .lift-row__inputs {
-    grid-template-columns: 1fr;
-  }
-
-  .attempt-body {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .lights {
-    justify-content: flex-start;
-  }
-
-  .leaderboard-header {
-    gap: 12px;
-  }
-
-  .leaderboard-controls {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  thead,
-  tbody,
-  tr,
-  td,
-  th {
-    white-space: nowrap;
-  }
-}
-
-@media (max-width: 520px) {
-  .header-logo {
-    max-width: clamp(140px, 60vw, 240px);
-  }
-
-  .ghost-btn,
-  button,
-  input,
-  select {
-    height: 44px;
-  }
-
-  .toast {
-    right: 12px;
-    left: 12px;
-    bottom: 12px;
-    justify-content: center;
-  }
-}
 
 .ghost-btn {
   border-radius: 999px;
